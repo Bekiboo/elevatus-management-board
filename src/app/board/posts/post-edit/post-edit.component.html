@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit(f)" #f="ngForm" id="document-edit">
+  <div class="mb-6">
+    <label for="title" formClasses  >Title</label>
+    <input type="text" id="title" formClasses>
+  </div>
+  
+  <div class="mb-6">
+    <label for="imgUrl" formClasses  >Image Url</label>
+    <input type="text" id="imgUrl" formClasses>
+  </div>
+  
+  <div class="mb-6">
+    <label for="message" formClasses  >Blog Post</label>
+    <textarea id="message" rows="4" formClasses placeholder="Write your blog post..."></textarea>
+  </div>
+</form>

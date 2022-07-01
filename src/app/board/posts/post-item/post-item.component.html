@@ -1,0 +1,6 @@
+<div class="mb-2">
+    <a routerLink={{post.id}} routerLinkActive="bg-gray-50" class="text-xl">
+        {{ (post.title.length > 40) ? (post.title | slice:0:40) + " ..." : (post.title)}}
+    </a>
+    <p>{{ (post.content.length > 60) ? (post.content | slice:0:60) + " ..." : (post.content)}}</p>
+</div>
