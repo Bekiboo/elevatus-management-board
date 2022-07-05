@@ -2,6 +2,7 @@
 var express = require("express");
 var path = require("path");
 var http = require("http");
+const { port, mongoURI } = require('./config')
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var morganLogger = require("morgan");
@@ -54,7 +55,7 @@ app.get("*", (req, res) => {
 });
 
 mongoose.connect(
-  "mongodb://localhost:27017/cms",
+  mongoURI,
   { useNewUrlParser: true },
   (err, res) => {
     if (err) {
@@ -65,7 +66,6 @@ mongoose.connect(
   }
 );
 
-const port = process.env.PORT || "3000";
 app.set("port", port);
 
 const server = http.createServer(app);
