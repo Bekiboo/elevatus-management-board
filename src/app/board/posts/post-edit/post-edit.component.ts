@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post.model';
@@ -14,7 +14,8 @@ export class PostEditComponent implements OnInit {
   constructor(
     private postService : PostService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private el: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +38,13 @@ export class PostEditComponent implements OnInit {
     // }
 
     
-    this.router.navigate(['../']);
+    // this.router.navigate(['../']);
   }
 
+  // holdHandler(event) {
+  //   console.log(event);
+    
+  //   // this.el.nativeElement.style.outlineWidth = `${event/100}px`
+
+  // }
 }

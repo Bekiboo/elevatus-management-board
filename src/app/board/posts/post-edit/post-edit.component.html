@@ -1,16 +1,21 @@
-<form (ngSubmit)="onSubmit(f)" #f="ngForm" id="document-edit">
+<form (ngSubmit)="onSubmit(f)" #f="ngForm" id="document-edit" class="w-full">
   <div class="mb-6">
-    <label for="title" formClasses  >Title</label>
+    <label for="title" formClasses>Title</label>
     <input type="text" id="title" formClasses>
   </div>
-  
+
   <div class="mb-6">
-    <label for="imgUrl" formClasses  >Image Url</label>
+    <label for="imgUrl" formClasses>Image Url</label>
     <input type="text" id="imgUrl" formClasses>
   </div>
-  
+
   <div class="mb-6">
-    <label for="message" formClasses  >Blog Post</label>
+    <label for="message" formClasses>Blog Post</label>
     <textarea id="message" rows="4" formClasses placeholder="Write your blog post..."></textarea>
   </div>
+
+  <!-- <div class="ml-auto"> -->
+    <button type="button" class="border focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded text-lg w-24 px-1 py-2.5 text-center mr-2
+                border-blue-500 text-blue-500 hover:text-black hover:bg-blue-600">Post</button>
+  <!-- </div> -->
 </form>

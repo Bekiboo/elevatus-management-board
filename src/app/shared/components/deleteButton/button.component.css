@@ -1,0 +1,23 @@
+.wrapper {
+  width: 4rem;
+}
+
+.bg {
+  width: 0%;
+}
+
+button {
+  width: 4rem;
+}
+
+button::after {
+  content: "Delete";
+  display: block;
+  text-align: center;
+  mix-blend-mode: difference;
+  /* animation: percentage 1s linear infinite; */
+}
+
+button:active::after {
+  content: "Hold"
+}
