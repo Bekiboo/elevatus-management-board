@@ -13,7 +13,7 @@ import { PostItemComponent } from './board/posts/post-item/post-item.component';
 import { FormDirective } from './shared/classes/input.directive';
 import { FormsModule } from '@angular/forms';
 import { HoldableDirective } from './shared/holdable.directive';
-import { ButtonComponent } from './shared/components/deleteButton/button.component';
+import { ButtonComponent } from './shared/components/deleteButton/deleteButton.component';
 
 @NgModule({
   declarations: [

@@ -2,9 +2,9 @@ import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { filter, interval, Observable, Subject, Subscription, take, takeUntil, tap } from 'rxjs';
 
 @Component({
-  selector: 'admin-board-button',
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.css']
+  selector: 'admin-board-deleteButton',
+  templateUrl: './deleteButton.component.html',
+  styleUrls: ['./deleteButton.component.css']
 })
 export class ButtonComponent implements OnInit {
   
