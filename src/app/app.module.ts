@@ -14,6 +14,7 @@ import { FormDirective } from './shared/classes/input.directive';
 import { FormsModule } from '@angular/forms';
 import { HoldableDirective } from './shared/holdable.directive';
 import { ButtonComponent } from './shared/components/deleteButton/deleteButton.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,12 +30,8 @@ import { ButtonComponent } from './shared/components/deleteButton/deleteButton.c
     HoldableDirective,
     ButtonComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
