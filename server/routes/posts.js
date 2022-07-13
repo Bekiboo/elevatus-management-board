@@ -17,10 +17,12 @@ router.get("/", (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const post = new Post({
+    date: Date.now(),
     title: req.body.title,
     content: req.body.content,
     imgUrl: req.body.imgUrl,
   });
+  console.log('Post:' + post);
 
   try {
     const createdPost = await post.save();
@@ -29,6 +31,7 @@ router.post("/", async (req, res, next) => {
       post: createdPost,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "An error occurred",
       error: err,

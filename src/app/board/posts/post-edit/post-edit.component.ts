@@ -1,50 +1,48 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
 
 @Component({
   selector: 'admin-board-post-edit',
   templateUrl: './post-edit.component.html',
-  styleUrls: ['./post-edit.component.css']
+  styleUrls: ['./post-edit.component.css'],
 })
 export class PostEditComponent implements OnInit {
+  @Input() editMode: boolean = false;
+  @Output() editModeChange = new EventEmitter<boolean>()
+  @Input() postId: string;
 
-  constructor(
-    private postService : PostService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private el: ElementRef
-  ) { }
+  post: Post;
+
+  constructor(private postService: PostService) {}
 
   ngOnInit(): void {
+    if (this.postId) {
+      this.post = this.postService.getPost(this.postId);
+    }
   }
 
   onSubmit(form: NgForm) {
     const value = form.value;
     const newPost = new Post(
       null,
-      Date.now(),
+      this.post?.date || null,
       value.title,
       value.content,
-      value.imgUrl,
+      value.imgUrl
     );
 
-    // if (this.editMode) {
-    //   this.postService.updatePost(this.originalPost, newPost);
-    // } else {
-    //   this.postService.addPost(newPost);
-    // }
+    if (this.editMode) {
 
-    
-    // this.router.navigate(['../']);
+      this.postService.updatePost(this.post, newPost);
+    } else {
+      this.postService.addPost(newPost);
+    }
+    form.reset()
   }
 
-  // holdHandler(event) {
-  //   console.log(event);
-    
-  //   // this.el.nativeElement.style.outlineWidth = `${event/100}px`
-
-  // }
+  handleCancel() {
+    this.editModeChange.emit(false)
+  }
 }

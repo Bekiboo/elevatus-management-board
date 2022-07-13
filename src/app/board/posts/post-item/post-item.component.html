@@ -1,28 +1,19 @@
-<!-- <div class="mt-2 rounded-lg bg-gray-900 outline outline-1 outline-slate-700 p-2.5">
-  <div class="flex justify-between">
-    <div class="text-l font-bold">
-      {{ (post.title.length > 40) ? (post.title | slice:0:40) + " ..." : (post.title)}}
-    </div>
-    <div class="flex">
-
-      <a [routerLink]="['/posts', post.id, 'edit']" type="button" class=" border focus:ring-4 focus:outline-none focus:ring-green-800 font-medium rounded text-sm w-16 px-1 py-1 text-center mr-2
-              border-green-500 text-green-500 hover:text-black hover:bg-green-600">Edit</a>
-
-      <admin-board-deleteButton class="ml-2"></admin-board-deleteButton>
-    </div>
-
-  </div>
-  <p class="text-sm">{{ (post.content.length > 60) ? (post.content | slice:0:60) + " ..." : (post.content)}}</p>
-</div> -->
-
-  <input type="checkbox" name="post" class="peer absolute top-0 inset-x-0 w-full h-12 opacity-0 z-10 cursor-pointer">
-  <div class="bg-blue-500 h-12 w-full pl-5 flex items-center">
+<div class="relative overflow-hidden">
+  <input (click)="handleCancel()" type="radio" name="post"
+    class="peer absolute top-0 inset-x-0 w-full h-12 opacity-0 z-10 cursor-pointer">
+  <div
+    class="flex h-12 justify-between items-center p-5 w-full font-medium text-left
+     border border-b-0 border-gray-700 text-white bg-slate-800 peer-hover:bg-gray-700
+     peer-checked:bg-gray-700"
+    [ngClass]="{'rounded-t-xl' : first}"
+  >
     <h1 class="text-lg font-semibold text-white">
       {{ (post.title.length > 40) ? (post.title | slice:0:40) + " ..." : (post.title)}}</h1>
+    <p class="mr-6">{{post.date | date}}</p>
   </div>
 
   <!-- Icon -->
-  <div class="absolute top-3 right-3 text-white transition duration-300 rotate-0 peer-checked:rotate-180">
+  <div class="absolute top-3 right-3 text-white transition duration-100 rotate-0 peer-checked:rotate-180">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
       stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -30,8 +21,30 @@
   </div>
 
   <!-- Content -->
-  <div class="bg-white overflow-hidden transition-all duration-300 max-h-0 peer-checked:max-h-40">
-    <div class="p-4">
-      <p class="text-sm">{{ (post.content.length > 60) ? (post.content | slice:0:60) + " ..." : (post.content)}}</p>
+  <div class="border border-b-0 border-gray-700 bg-gray-900 overflow-hidden max-h-0 peer-checked:max-h-min">
+
+    <div *ngIf="!editMode" class="p-4">
+      <p class="text-sm min-h-[4rem]">{{ post.content }}</p>
+
+      <div class="flex justify-end mt-2">
+
+        <a 
+          (click)="handleEdit()" 
+          type="button" 
+            class="border focus:ring-4 focus:outline-none focus:ring-green-800 
+            font-medium rounded text-sm w-16 px-1 py-1 text-center mr-2 cursor-pointer
+            border-green-400 text-green-400 hover:text-black hover:bg-green-500">
+          Edit
+        </a>
+
+        <admin-board-deleteButton (completedEvent)="deletePost()" class="ml-2"></admin-board-deleteButton>
+
+      </div>
     </div>
+
+    <div class="p-4">
+      <admin-board-post-edit *ngIf="editMode" [postId]="post._id" [(editMode)]="editMode"></admin-board-post-edit>
+    </div>
+
   </div>
+</div>

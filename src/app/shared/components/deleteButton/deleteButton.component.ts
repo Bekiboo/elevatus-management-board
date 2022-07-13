@@ -1,20 +1,43 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { filter, interval, Observable, Subject, Subscription, take, takeUntil, tap } from 'rxjs';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import {
+  filter,
+  interval,
+  Observable,
+  Subject,
+  Subscription,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'admin-board-deleteButton',
   templateUrl: './deleteButton.component.html',
-  styleUrls: ['./deleteButton.component.css']
+  styleUrls: ['./deleteButton.component.css'],
 })
 export class ButtonComponent implements OnInit {
-  
-  buttonSubscribtion: Subscription
+  buttonSubscribtion: Subscription;
   holdTime: Subject<number> = new Subject();
   state: Subject<string> = new Subject();
   cancel: Observable<string>;
 
+  currentState: string;
+  subscription: Subscription = this.state.subscribe(
+    (state) => (this.currentState = state)
+  );
+
+  complete: boolean;
+
+  @Output() completedEvent = new EventEmitter<boolean>();
+
   constructor(private el: ElementRef) {
-    
     this.cancel = this.state.pipe(
       filter((event) => event === 'cancel'),
       tap((event) => {
@@ -26,41 +49,42 @@ export class ButtonComponent implements OnInit {
   @HostListener('mouseup', ['$event'])
   @HostListener('mouseleave', ['$event'])
   onExit() {
-    this.state.next('cancel');
+    if (!this.complete) this.state.next('cancel');
   }
 
   @HostListener('mousedown', ['$event'])
-  onHold() {  
-    this.holdTime.subscribe(
-      (iteration) => {
+  onHold() {
+    if (!this.complete) {
+      this.holdTime.subscribe((iteration) => {
         this.el.nativeElement.children[0].children[0].style.width = `${
-          (iteration) / 10
-        }%`
-      }      
-    );
+          iteration / 10
+        }%`;
+      });
+      this.state.next('start');
 
-    this.state.next('start');
+      const tick = 10;
 
-    const tick = 10;
-
-    interval(tick)
-      .pipe(
-        takeUntil(this.cancel),
-        tap((iteration) => {
-          if (iteration >= 100) {
-            this.state.next('completed');
-            this.el.nativeElement.children[0].children[0].style.width = "100%"
-            this.el.nativeElement.children[0].children[0].children[0].classList.add('complete')
-            return
-          }
-          this.holdTime.next(iteration * tick);
-        }),
-        take(101),
-      )
-      .subscribe();
+      interval(tick)
+        .pipe(
+          takeUntil(this.cancel),
+          tap((iteration) => {
+            if (iteration >= 100) {
+              this.onComplete();
+            }
+            this.holdTime.next(iteration * tick);
+          }),
+          take(101)
+        )
+        .subscribe();
+    }
   }
 
-  ngOnInit(): void {
+  onComplete() {
+    this.state.next('completed');
+    this.completedEvent.emit(true);
+    this.complete = true;
+    return;
   }
 
+  ngOnInit(): void {}
 }

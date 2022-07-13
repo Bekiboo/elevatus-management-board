@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../post.model';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'admin-board-post-item',
@@ -8,12 +9,29 @@ import { Post } from '../post.model';
 })
 export class PostItemComponent implements OnInit {
   @Input() post: Post
+  @Input() first: boolean
 
-  test = 'bg-blue-500'
+  originalPost: Post
+  editMode: boolean = false
+  id: number
 
-  constructor() { }
+  constructor(
+    private postService: PostService,
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
+  }
+
+  handleEdit() {
+    this.editMode = true
+  }
+
+  handleCancel() {
+    this.editMode = false
+  }
+
+  deletePost() {
+    this.postService.deletePost(this.post)
   }
 
 }

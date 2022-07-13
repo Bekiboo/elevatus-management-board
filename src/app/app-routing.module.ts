@@ -19,16 +19,16 @@ const routes: Routes = [
   {
     path: 'posts',
     component: PostsComponent,
-    children: [
-      {
-        path: 'new',
-        component: PostEditComponent,
-      },
-      {
-        path: ':id/edit',
-        component: PostEditComponent,
-      },
-    ],
+    // children: [
+    //   {
+    //     path: 'new',
+    //     component: PostEditComponent,
+    //   },
+    //   {
+    //     path: ':id/edit',
+    //     component: PostEditComponent,
+    //   },
+    // ],
   },
 ];
 
