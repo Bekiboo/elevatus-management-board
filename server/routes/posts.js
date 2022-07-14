@@ -41,13 +41,13 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const post = await Post.findOne({ id: req.params.id });
-    post.name = req.body.name;
-    post.description = req.body.description;
-    post.url = req.body.url;
+    const post = await Post.findOne({ _id: req.params.id });
+    post.title = req.body.title;
+    post.imgUrl = req.body.imgUrl;
+    post.content = req.body.content;
 
     try {
-      const result = await Post.updateOne({ id: req.params.id }, post);
+      const result = await Post.updateOne({ _id: req.params.id }, post);
       res.status(204).json({
         message: "Post updated successfully",
       });
@@ -68,10 +68,10 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    const post = await Post.findOne({ id: req.params.id });
+    const post = await Post.findOne({ _id: req.params.id });
 
     try {
-      const result = await Post.deleteOne({ id: req.params.id });
+      const result = await Post.deleteOne({ _id: req.params.id });
       res.status(204).json({
         message: "Post deleted successfully",
       });

@@ -7,6 +7,7 @@
      peer-checked:bg-gray-700"
     [ngClass]="{'rounded-t-xl' : first}"
   >
+  <p>{{post._id}}</p>
     <h1 class="text-lg font-semibold text-white">
       {{ (post.title.length > 40) ? (post.title | slice:0:40) + " ..." : (post.title)}}</h1>
     <p class="mr-6">{{post.date | date}}</p>

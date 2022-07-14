@@ -95,6 +95,9 @@ export class PostService {
       return;
     }
 
+    console.log('post to be delete: ' + post._id);
+    
+
     // delete from database
     this.http
       .delete('http://localhost:3000/posts/' + post._id)
