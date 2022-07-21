@@ -18,9 +18,9 @@ import {
 } from 'rxjs';
 
 @Component({
-  selector: 'admin-board-deleteButton',
-  templateUrl: './deleteButton.component.html',
-  styleUrls: ['./deleteButton.component.css'],
+  selector: 'admin-board-delete-button',
+  templateUrl: './delete-button.component.html',
+  styleUrls: ['./delete-button.component.css'],
 })
 export class ButtonComponent implements OnInit {
   buttonSubscribtion: Subscription;
