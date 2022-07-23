@@ -11,7 +11,7 @@ import { PostEditComponent } from './board/posts/post-edit/post-edit.component';
 import { PostListComponent } from './board/posts/post-list/post-list.component';
 import { PostItemComponent } from './board/posts/post-item/post-item.component';
 import { FormDirective } from './shared/classes/input.directive';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from './shared/components/delete-button/delete-button.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BasicButtonComponent } from './shared/components/basic-button/basic-button.component';
@@ -32,7 +32,7 @@ import { FilePickerButtonComponent } from './shared/components/file-picker-butto
     BasicButtonComponent,
     FilePickerButtonComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })

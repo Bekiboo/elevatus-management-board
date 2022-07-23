@@ -1,34 +1,38 @@
-<form (ngSubmit)="onSubmit(f)" #f="ngForm" id="document-edit" class="w-full">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" id="document-edit" class="w-full">
+
+  <!-- Title Input -->
   <div class="mb-6">
     <label for="title" formClasses>Title</label>
-    <input [ngModel]="post?.title" name="title" type="text" id="title" formClasses required>
+    <input formControlName="title" type="text" id="title" formClasses>
   </div>
 
-  <!-- <div class="mb-6">
-    <label for="imgUrl" formClasses>Image Url</label>
-    <input [ngModel]="post?.imgUrl" name="imgUrl" type="url" id="imgUrl" formClasses required>
-  </div> -->
-
+  <!-- Image Picker -->
   <admin-board-basic-button text="Pick Image" color="green" (click)="filePicker.click()"></admin-board-basic-button>
-  <input type="file" class="hidden" #filePicker>
+  <input type="file" class="hidden" #filePicker (change)="onImagePicked($event)">
 
+  <!-- Image Preview -->
+  <div class="image-preview h-20 my-4" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+    <img class="max-h-full" [src]="imagePreview" [alt]="form.value.title">
+  </div>
+
+  <!-- Blog Content Input -->
   <div class="mb-6">
     <label for="message" formClasses>Blog Post</label>
-    <textarea [ngModel]="post?.content" name="content" class="min-h-[16rem]" id="message" rows="4" formClasses
+    <textarea formControlName="content" class="min-h-[16rem]" id="message" rows="4" formClasses
       placeholder="Write your blog post..." required>
     </textarea>
   </div>
 
-  <div *ngIf="!f.valid" data-tooltip="Fields can't be empty" class="w-24 h-12 cursor-not-allowed">
+  <!-- Submit Button with Warning Tooltip -->
+  <div *ngIf="!form.valid" data-tooltip="Fields can't be empty" class="w-24 h-12 cursor-not-allowed">
   </div>
-  <button type="submit" [disabled]="!f.valid" class="border font-medium rounded text-lg w-24 px-1 py-2.5 text-center mr-2
-          border-blue-400 text-blue-400" [ngClass]="{'hover:text-black hover:bg-blue-500' : f.valid}">
+  <button type="submit" [disabled]="!form.valid" class="border font-medium rounded text-lg w-24 px-1 py-2.5 text-center mr-2
+          border-blue-400 text-blue-400" [ngClass]="{'hover:text-black hover:bg-blue-500' : form.valid}">
     {{ editMode ? "Update" : "Post" }}
   </button>
 
-  <button
-    *ngIf="editMode" (click)="handleCancel()" type="button"
-    class="border font-medium rounded text-lg w-24 px-1 py-2.5 text-center mr-2
+  <!-- Cancel Button -->
+  <button *ngIf="editMode" (click)="handleCancel()" type="button" class="border font-medium rounded text-lg w-24 px-1 py-2.5 text-center mr-2
     border-red-400 text-red-400 hover:text-black hover:bg-red-500">
     Cancel
   </button>

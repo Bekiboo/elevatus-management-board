@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
 
@@ -10,21 +10,56 @@ import { PostService } from '../post.service';
 })
 export class PostEditComponent implements OnInit {
   @Input() editMode: boolean = false;
-  @Output() editModeChange = new EventEmitter<boolean>()
+  @Output() editModeChange = new EventEmitter<boolean>();
   @Input() postId: string;
 
   post: Post;
 
+  form: FormGroup;
+  imagePreview: string
+
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      title: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      content: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      image: new FormControl(null, {
+        validators: [Validators.required],
+      }),
+    });
     if (this.postId) {
       this.post = this.postService.getPost(this.postId);
     }
+
+    if (this.post)
+      this.form.setValue({
+        title: this.post.title,
+        content: this.post.content,
+      });
   }
 
-  onSubmit(form: NgForm) {
-    const value = form.value;
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+
+    // What do these two lines do exactly?
+    this.form.patchValue({image: file})
+    this.form.get('image').updateValueAndValidity()
+    // console.log(file);
+    // console.log(this.form);
+    const reader = new FileReader()
+    reader.onload = () => {
+      this.imagePreview = reader.result as string
+    }   
+    reader.readAsDataURL(file)
+  }
+
+  onSubmit() {
+    const value = this.form.value;
     const newPost = new Post(
       null,
       this.post?.date || null,
@@ -34,15 +69,14 @@ export class PostEditComponent implements OnInit {
     );
 
     if (this.editMode) {
-
       this.postService.updatePost(this.post, newPost);
     } else {
       this.postService.addPost(newPost);
     }
-    form.reset()
+    this.form.reset();
   }
 
   handleCancel() {
-    this.editModeChange.emit(false)
+    this.editModeChange.emit(false);
   }
 }
