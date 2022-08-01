@@ -2,7 +2,7 @@
 var express = require("express");
 var path = require("path");
 var http = require("http");
-const { port, mongoURI } = require('./config')
+const { port, mongoURI } = require("./config");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var morganLogger = require("morgan");
@@ -17,12 +17,9 @@ var app = express(); // create an instance of express
 
 // parsers for POST data
 app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  })
-)
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/images", express.static(path.join("server/images")))
 
 app.use(morganLogger("dev")); // Tell express to use the Morgan logger
 
@@ -54,17 +51,13 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist/cms/index.html"));
 });
 
-mongoose.connect(
-  mongoURI,
-  { useNewUrlParser: true },
-  (err, res) => {
-    if (err) {
-      console.log("Connection failed: " + err);
-    } else {
-      console.log("Connected to database!");
-    }
+mongoose.connect(mongoURI, { useNewUrlParser: true }, (err, res) => {
+  if (err) {
+    console.log("Connection failed: " + err);
+  } else {
+    console.log("Connected to database!");
   }
-);
+});
 
 app.set("port", port);
 

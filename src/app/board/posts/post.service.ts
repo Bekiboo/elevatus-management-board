@@ -17,9 +17,10 @@ export class PostService {
   }
 
   getPosts(): Post[] {
+    // Ce truc là fais ça
     this.http.get('http://localhost:3000/posts').subscribe({
       next: (posts: Post[]) => {
-        this.posts = posts;        
+        this.posts = posts;
         this.sortAndSend();
       },
       error: (e) => console.log(e.message),
@@ -36,30 +37,46 @@ export class PostService {
     this.postListChangedEvent.next([...this.posts]);
   }
 
-  addPost(post: Post) {
+  addPost(post: Post, image: File) {
     if (!post) {
       return;
     }
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const postData = new FormData();
+    postData.append('title', post.title);
+    postData.append('content', post.content);
+    postData.append('image', image, post.title);
+
+    // Headers not need anymore, taken care of by FormData
+    // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     // add to database
     this.http
       .post<{ message: string; post: Post }>(
         'http://localhost:3000/posts',
-        post,
-        { headers: headers }
+        postData
       )
       .subscribe((responseData) => {
+        // TODO ? From Academind "Uploading Files"
         // add new post to posts
         this.posts.push(responseData.post);
         this.sortAndSend();
       });
   }
 
-  updatePost(originalPost: Post, newPost: Post) {
-    if (!originalPost || !newPost) {
-      return;
+  updatePost(originalPost: Post, newPost: Post, image: string | File) {
+    if (!originalPost || !newPost) return;
+
+    let postData: Post | FormData;
+
+    if (typeof image === 'object') {
+      postData = new FormData();
+      postData.append('_id', newPost._id);
+      postData.append('title', newPost.title);
+      postData.append('content', newPost.content);
+      postData.append('image', image, newPost.title);
+    } else {
+      postData = newPost;
     }
 
     const pos = this.posts.findIndex((d) => d._id === originalPost._id);
@@ -71,15 +88,18 @@ export class PostService {
     // set the id of the new Post to the id of the old Post
     newPost._id = originalPost._id;
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     // update database
     this.http
-      .put('http://localhost:3000/posts/' + originalPost._id, newPost, {
-        headers: headers,
-      })
-      .subscribe((response: Response) => {
-        this.posts[pos] = newPost;
+      .put<{ message: string; post: Post }>(
+        'http://localhost:3000/posts/' + originalPost._id,
+        postData
+      )
+      .subscribe((responseData) => {
+        console.log(responseData);
+        
+        this.posts[pos] = responseData.post;
         this.sortAndSend();
       });
   }
@@ -96,7 +116,6 @@ export class PostService {
     }
 
     console.log('post to be delete: ' + post._id);
-    
 
     // delete from database
     this.http

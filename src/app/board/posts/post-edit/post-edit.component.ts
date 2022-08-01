@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
+import { mimeType } from "./mime-type.validator";
 
 @Component({
   selector: 'admin-board-post-edit',
@@ -29,28 +30,31 @@ export class PostEditComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3)],
       }),
       image: new FormControl(null, {
-        validators: [Validators.required],
+        validators: [Validators.required], asyncValidators: [mimeType]
       }),
     });
+    
     if (this.postId) {
       this.post = this.postService.getPost(this.postId);
     }
 
-    if (this.post)
+    if (this.post) {
       this.form.setValue({
         title: this.post.title,
         content: this.post.content,
+        image: this.post.imagePath
       });
+      this.imagePreview = this.post.imagePath
+    }
   }
 
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
 
-    // What do these two lines do exactly?
+    // TODO: What do these two lines do exactly?
     this.form.patchValue({image: file})
     this.form.get('image').updateValueAndValidity()
-    // console.log(file);
-    // console.log(this.form);
+
     const reader = new FileReader()
     reader.onload = () => {
       this.imagePreview = reader.result as string
@@ -65,13 +69,13 @@ export class PostEditComponent implements OnInit {
       this.post?.date || null,
       value.title,
       value.content,
-      value.imgUrl
+      value.image
     );
 
     if (this.editMode) {
-      this.postService.updatePost(this.post, newPost);
+      this.postService.updatePost(this.post, newPost, value.image);
     } else {
-      this.postService.addPost(newPost);
+      this.postService.addPost(newPost, value.image);
     }
     this.form.reset();
   }
