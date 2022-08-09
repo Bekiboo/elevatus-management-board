@@ -47,6 +47,7 @@ router.post(
   multer({ storage: storage }).single("image"),
   async (req, res, next) => {
     const { filename: image } = req.file;
+    console.log(req.file.path);
 
     await sharp(req.file.path)
       .resize(1000)
@@ -97,15 +98,25 @@ router.put(
 
     try {
       const post = await Post.findOne({ _id: req.params.id });
+
+      const filePath = post.imagePath.substring(
+        post.imagePath.indexOf("/images")
+      );
+
       post.title = req.body.title;
       post.imagePath = imagePath;
       post.content = req.body.content;
 
       try {
         const result = await Post.updateOne({ _id: req.params.id }, post);
+
+        if (req.file) {
+          fs.unlinkSync("server" + filePath);
+        }
+
         res.status(200).json({
           message: "Post updated successfully",
-          post: post
+          post: post,
         });
       } catch (err) {
         res.status(500).json({
@@ -128,6 +139,11 @@ router.delete("/:id", async (req, res, next) => {
 
     try {
       const result = await Post.deleteOne({ _id: req.params.id });
+      const filePath = post.imagePath.substring(
+        post.imagePath.indexOf("/images")
+      );
+      console.log("filePath: " + filePath);
+      fs.unlinkSync("server" + filePath);
       res.status(204).json({
         message: "Post deleted successfully",
       });

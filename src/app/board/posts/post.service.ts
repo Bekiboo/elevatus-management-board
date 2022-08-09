@@ -13,7 +13,7 @@ export class PostService {
   private posts: Post[] = [];
 
   constructor(private http: HttpClient) {
-    this.posts = this.getPosts();
+    // this.posts = this.getPosts();
   }
 
   getPosts(): Post[] {
