@@ -2,16 +2,16 @@
 var express = require("express");
 var path = require("path");
 var http = require("http");
-const { port, mongoURI } = require("./config");
+const { port, mongoURI } = require("../config");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var morganLogger = require("morgan");
 var mongoose = require("mongoose");
 
 // ROUTING FILES
-var index = require("./server/routes/app"); // Default route
-const childRoutes = require("./server/routes/children");
-const postRoutes = require("./server/routes/posts");
+var index = require("./routes/app"); // Default route
+const childRoutes = require("./routes/children");
+const postRoutes = require("./routes/posts");
 
 var app = express(); // create an instance of express
 

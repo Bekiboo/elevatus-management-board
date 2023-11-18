@@ -18,6 +18,7 @@ import { BasicButtonComponent } from './shared/components/basic-button/basic-but
 import { FilePickerButtonComponent } from './shared/components/file-picker-button/file-picker-button.component';
 
 import { FormDirective } from './shared/classes/input.directive';
+import { PostItemComponent } from './board/posts/post-item/post-item.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FormDirective } from './shared/classes/input.directive';
     ButtonComponent,
     BasicButtonComponent,
     FilePickerButtonComponent,
+    PostItemComponent,
   ],
   imports: [
     BrowserModule,
